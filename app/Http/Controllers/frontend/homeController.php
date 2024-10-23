@@ -12,7 +12,7 @@ use App\Province;
 use App\Subdistrict;
 use App\SubKategoriPekerjaan;
 
-class homeController extends Controller
+class HomeController extends Controller
 {
     public function index()
     {

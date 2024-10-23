@@ -1,6 +1,4 @@
 <?php
-
-use App\Http\Controllers\loginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,33 +11,36 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 use App\Http\Controllers\backend\{
     tokenController,
     memberController,
     themesController,
     cardController,
     kategoriPekerjaanController,
-    displayController as BackendDisplayController,  
+    displayController as BackendDisplayController,  // Alias untuk Display Controller backend
     adminController,
     WaTemplatesController,
-    produkController as BackendProductController,
+    produkController as BackendProductController,   // Alias untuk Product Controller backend
     profileController,
     konfigurasiController,
-    loginController as BackendLoginController  
+    loginController as BackendLoginController       // Alias untuk Login Controller backend
+};
+
+use App\Http\Controllers\frontend\{
+    HomeController
 };
 
 use App\Http\Controllers\{
-    loginController as FrontendLoginController,  
-    frontend\HomeController,
+    HomeController as FrontendHomeController,
+    loginController as FrontendLoginController,     // Alias untuk Login Controller frontend
     registerController,
     profilController,
     bisnisController,
-    produkController as FrontendProductController,
+    produkController as FrontendProductController,  // Alias untuk Product Controller frontend
     fotoController,
     videoController,
     kartunamaController,
-    displayController as FrontendDisplayController,  
+    displayController as FrontendDisplayController, // Alias untuk Display Controller frontend
     kontakController,
     agendaController,
     landingPageController,
@@ -223,5 +224,13 @@ Route::group(['middleware' => 'loginMiddleware'], function () {
     Route::post('/admin/profile', [admin\profileController::class, 'update'])->name('update_profile_admin');
     Route::get('/admin/ubah_password', [admin\profileController::class, 'ubah_password']);
     Route::post('/admin/ubah_password', [admin\profileController::class, 'proses_ubah_password'])->name('ubah_password_backend');
-    Route::get('/admin/dashboard', [HomeController::class, 'dashboard_backend']);
+    Route::get('/admin/dashboard', [FrontendHomeController::class, 'dashboard_backend']);
 });
+
+
+Route::post('/dashboard', [FrontendLoginController::class, 'login'])->name('proses_login');
+Route::post('/backend/dashboard', [BackendLoginController::class, 'login_backend'])->name('proses_login_backend');
+
+Route::get('/kartumember/{id}', [kartumemberController::class, 'index']);
+Route::get('/{id}', [FrontendHomeController::class, 'replika']);
+Route::get('/kartunama/{id}', [kartunamaController::class, 'index']);
